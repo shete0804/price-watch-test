@@ -1,5 +1,5 @@
 check:
-    interval_sec: 1800 # 監視周期（秒）
+    interval_sec: 1800
 
 slack:
     bot_token: "dummy-slack-token"
@@ -14,7 +14,6 @@ slack:
         interval_min: 60
 
 store:
-    # PA-API で価格を取得するための設定
     amazon:
         associate: XXXXXX-22
         access_key: XXXXXXXXXXXXXXXXXXXX
@@ -22,40 +21,28 @@ store:
         host: webservices.amazon.co.jp
         region: us-west-2
 
-    # Yahoo!ショッピング API で価格を取得するための設定
     yahoo:
         client_id: XXXXXXXXXXXXXXXXXXXX
         secret: XXXXXXXXXXXXXXXXXXXX
 
 data:
-    selenium: ./data # Selenium プロファイルを保存するディレクトリ
-    dump: ./data/debug # デバッグダンプを保存するディレクトリ
-    price: ./data/price # 価格履歴DBを保存するディレクトリ
-    thumb: ./data/thumb # サムネイル画像を保存するディレクトリ
-    metrics: ./data/metrics # メトリクスを保存するディレクトリ
-    cache: ./data/cache # OGP画像等のキャッシュを保存するディレクトリ
+    selenium: ./data
+    dump: ./data/debug
+    price: ./data/price
+    thumb: ./data/thumb
+    metrics: ./data/metrics
+    cache: ./data/cache
 
 target:
-    define: target.yaml # 監視対象の設定ファイル
-
-webapp: {}
+    define: target.yaml
 
 liveness:
     file:
-        crawler: /dev/shm/healthz # ヘルスチェック用ファイル
-    interval_sec: 300 # ヘルスチェック間隔（秒）
+        crawler: /dev/shm/healthz
+    interval_sec: 300
 
-# エディタ設定（必須）
+webapp:
+    static_dir_path: frontend/dist
+
 edit:
-    # パスワードハッシュ（Argon2id）- 必須
-    # 生成方法: echo "your_password" | uv run python -m price_watch.webapi.password
-    # 以下は "password" のハッシュ値
     password_hash: "$argon2id$v=19$m=65536,t=3,p=4$G3sQ/+Jkh/ufAWCJDUTaPw$8wl44G3QrQysWT9mIDLD3bf0fLn0o/RO1EnYVVovyLs"
-
-    # Git 同期設定（オプション）
-    # 指定する場合、以下の4項目は全て必須
-    # git:
-    #     remote_url: "https://gitlab.example.com/user/repo.git"
-    #     file_path: "config/target.yaml"
-    #     access_token: "glpat-xxx"  # GitLab: glpat-*, GitHub: ghp_*
-    #     branch: "main"
