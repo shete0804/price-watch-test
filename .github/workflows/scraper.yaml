@@ -27,6 +27,9 @@ jobs:
       - name: Create data directories
         run: mkdir -p data/price data/debug data/thumb data/metrics data/cache
 
+      - name: Check files
+        run: ls -la config.yaml target.yaml || echo "Files not found"
+
       - name: Run price-watch
         run: uv run price-watch -c config.yaml -t target.yaml
 
