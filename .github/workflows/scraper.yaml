@@ -28,7 +28,7 @@ jobs:
         run: mkdir -p data/price data/debug data/thumb data/metrics data/cache
 
       - name: Run price-watch
-        run: uv run price-watch
+        run: uv run price-watch -c config.yaml -t target.yaml
 
       - name: Upload logs
         if: always()
