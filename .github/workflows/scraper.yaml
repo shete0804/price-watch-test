@@ -1,0 +1,39 @@
+name: Price Watch Scraper
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install uv
+        run: pip install uv
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Create data directories
+        run: mkdir -p data/price data/debug data/thumb data/metrics data/cache
+
+      - name: Run price-watch
+        run: uv run price-watch
+
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: price-watch-logs
+          path: data/debug/
+          retention-days: 7
