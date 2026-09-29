@@ -38,6 +38,8 @@ data:
 target:
     define: target.yaml # 監視対象の設定ファイル
 
+webapp: {}
+
 liveness:
     file:
         crawler: /dev/shm/healthz # ヘルスチェック用ファイル
