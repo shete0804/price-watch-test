@@ -1,3 +1,6 @@
+check:
+    interval_sec: 999999999  # Very large value to ensure single execution (won't trigger another check within 20m timeout)
+
 slack:
     bot_token: "dummy-slack-token"
     from: price-watch
