@@ -9,7 +9,7 @@ on:
 jobs:
   scrape:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
 
@@ -31,12 +31,27 @@ jobs:
         run: ls -la config.yaml target.yaml || echo "Files not found"
 
       - name: Run price-watch
-        run: uv run price-watch -c config.yaml -t target.yaml
+        run: |
+          uv run price-watch -c config.yaml -t target.yaml || {
+            echo "ERROR: price-watch failed"
+            echo "Exit code: $?"
+            exit 1
+          }
+
+      - name: Check output files
+        if: always()
+        run: |
+          echo "=== data/ directory contents ==="
+          find data -type f -mmin -30 | head -20 || echo "No recent files found"
+          echo "=== data/price/ ==="
+          ls -lah data/price/ 2>/dev/null || echo "Directory not found or empty"
+          echo "=== data/debug/ ==="
+          ls -lah data/debug/ 2>/dev/null || echo "Directory not found or empty"
 
       - name: Upload logs
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: price-watch-logs
-          path: data/debug/
+          path: data/
           retention-days: 7
