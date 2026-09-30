@@ -1,6 +1,3 @@
-check:
-    interval_sec: 0
-
 slack:
     bot_token: "dummy-slack-token"
     from: price-watch
